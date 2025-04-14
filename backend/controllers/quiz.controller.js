@@ -34,13 +34,21 @@ exports.createQuestion = async (req, res) => {
 };
 
 exports.getAllQuestions = async (req, res) => {
-    try {
-      const questions = await Question.find();
-      res.status(200).json({ questions });
-    } catch (err) {
-      console.error('Error fetching questions:', err.message);
-      res.status(500).json({ message: 'Server error retrieving questions.' });
-    }
+  try {
+    const { difficulty, theme } = req.query;
+
+    // Build a dynamic filter object
+    const filter = {};
+    if (difficulty) filter.difficulty = difficulty;
+    if (theme) filter.theme = theme;
+
+    const questions = await Question.find(filter);
+    res.status(200).json({ questions });
+  } catch (err) {
+    console.error('Error fetching questions:', err.message);
+    res.status(500).json({ message: 'Server error retrieving questions.' });
+  }
 };
+
   
 

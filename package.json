@@ -14,5 +14,8 @@
     "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install && cd ../electron && npm install",
     "build": "cd frontend && npm run build",
     "package": "npm run build && cd electron && npm run package"
+  },
+  "dependencies": {
+    "cors": "^2.8.5"
   }
 }

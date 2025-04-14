@@ -9,3 +9,5 @@ router.post("/createQuestion",  createQuestion);
 
 //Get All Questions
 router.get("/getAllQuestions",  getAllQuestions);
+
+module.exports = router; 

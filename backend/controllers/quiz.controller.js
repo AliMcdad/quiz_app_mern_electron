@@ -4,7 +4,7 @@ exports.createQuestion = async (req, res) => {
   try {
     const { mainQuestion, theme, difficulty, answers, correctAnswer } = req.body;
 
-    // 🧠 Basic Validation
+    
     if (!mainQuestion || !theme || !difficulty || !answers || !correctAnswer) {
     return res.status(400).json({ message: 'All fields are required.' });
     }

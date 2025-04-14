@@ -1,12 +1,42 @@
 {
-  "name": "electron",
+  "name": "quiz-app-electron",
   "version": "1.0.0",
-  "description": "",
-  "license": "ISC",
-  "author": "AliMcdad",
-  "type": "commonjs",
+  "description": "Quiz App Desktop Application using MERN stack",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron .",
+    "package": "electron-builder build --mac --win --linux",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^23.1.3",
+    "electron-builder": "^24.0.0"
+  },
+  "dependencies": {
+    "electron-is-dev": "^2.0.0"
+  },
+  "build": {
+    "appId": "com.yourname.quizapp",
+    "productName": "Quiz App",
+    "files": [
+      "main.js",
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "mac": {
+      "category": "public.app-category.education"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "deb",
+      "category": "Education"
+    }
   }
 }

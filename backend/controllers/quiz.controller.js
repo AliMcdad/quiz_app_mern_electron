@@ -17,11 +17,6 @@ exports.createQuestion = async (req, res) => {
     return res.status(400).json({ message: 'Correct answer must be one of the provided answers.' });
     }
 
-    const allowedDifficulties = ['beginner', 'intermediate', 'expert'];
-    if (!allowedDifficulties.includes(difficulty)) {
-    return res.status(400).json({ message: 'Difficulty must be beginner, intermediate, or expert.' });
-    }
-
     const newQuestion = new Question({
       mainQuestion,
       theme,

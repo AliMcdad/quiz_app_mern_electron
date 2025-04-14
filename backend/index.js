@@ -19,7 +19,7 @@ app.use(cors({
 
 
 // Routes
-app.use("/api/questionRouter", questionRouter);
+app.use("/api/questions", questionRouter);
 
 
 //Start Server

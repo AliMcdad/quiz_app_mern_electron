@@ -98,20 +98,27 @@ function App() {
 
         {currentStep === 4 && (
           <Quiz
-            topic={quizData.selectedTopic}
-            difficulty={quizData.selectedLevel}
-            questions={quizData.questions}
-            onComplete={({ score, total }) => {
-              setQuizData(prev => ({ ...prev, score, total }));
-              setCurrentStep(5);
-            }}            
-          />
+          topic={quizData.selectedTopic}
+          difficulty={quizData.selectedLevel}
+          questions={quizData.questions}
+          onComplete={({ score, total }) => {
+            console.log("✅ handleQuizComplete received:", { score, total });
+      
+            setQuizData(prev => ({
+              ...prev,
+              score,  // number
+              total   // number
+            }));
+      
+            setCurrentStep(5);
+          }}
+        />
         )}
 
         {currentStep === 5 && quizData.score !== undefined && (
           <Results 
             score={Number(quizData.score)}
-            total={quizData.questions ? quizData.questions.length : 0}
+            total={quizData.questions ? quizData.total : 0}
             onRestart={handleRestart}
           />
         )}

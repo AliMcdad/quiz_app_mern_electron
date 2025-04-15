@@ -1,6 +1,9 @@
 export const Results = ({ score, total, onRestart }) => {
   console.log("📊 Results received:", { score, total });
-    const percentage = ((score / total) * 100).toFixed(1);
+  const safeScore = typeof score === 'number' ? score : 0;
+  const safeTotal = typeof total === 'number' && total > 0 ? total : 1;
+  const percentage = ((safeScore / safeTotal) * 100).toFixed(1);
+    
   
     return (
       <div className="results-container">

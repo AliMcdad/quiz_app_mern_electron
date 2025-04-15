@@ -14,7 +14,7 @@ export const Quiz = ({ topic, difficulty, onComplete }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
+/*   useEffect(() => {
     const savedProgress = getStorageItem('quizProgress');
     if (savedProgress) {
       setProgress(savedProgress);
@@ -24,8 +24,19 @@ export const Quiz = ({ topic, difficulty, onComplete }) => {
       loadQuestion(1);
     }
   }, []);
-  
+   */
 
+  useEffect(() => {
+    const savedProgress = getStorageItem('quizProgress');
+  
+    if (savedProgress) {
+      setScore(savedProgress.score || 0);
+      loadQuestion(savedProgress.page); // Let this fetch + set fresh progress
+    } else {
+      loadQuestion(1);
+    }
+  }, []);
+  
   const loadQuestion = async (page) => {
     try {
       setLoading(true);

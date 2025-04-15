@@ -1,8 +1,8 @@
-// electron/main.js
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const isDev = require("electron-is-dev");
 const { spawn } = require("child_process");
+
 
 let mainWindow;
 let serverProcess;
@@ -19,17 +19,11 @@ function createWindow() {
     icon: path.join(__dirname, "../frontend/public/vite.svg"),
   });
 
-  // Load the app
-  mainWindow.loadURL(
-    isDev
-      ? "http://localhost:3000" // Development server
-      : `file://${path.join(__dirname, "../frontend/build/index.html")}` // Production build
-  );
+  // In development, load directly from React dev server
+  mainWindow.loadURL("http://localhost:5173");
 
-  // Open DevTools in development mode
-  if (isDev) {
-    mainWindow.webContents.openDevTools();
-  }
+  // Open DevTools for debugging
+  mainWindow.webContents.openDevTools();
 
   // Handle window when closed
   mainWindow.on("closed", () => {
@@ -44,7 +38,7 @@ function startBackendServer() {
   // Command to start the server
   const serverProcess = spawn("node", ["index.js"], {
     cwd: serverPath,
-    env: { ...process.env, PORT: 3000 },
+    env: { ...process.env, PORT: 3000 }, // Use port 5000 for backend
   });
 
   serverProcess.stdout.on("data", (data) => {

@@ -28,18 +28,18 @@ function App() {
       5: ['username', 'selectedTopic', 'selectedLevel', 'questions', 'score']
     };
 
-    const isValid = requiredFields[savedData.step]?.every(
+    const isValid = savedData.step && requiredFields[savedData.step]?.every(
       key => key in savedData
     );
 
-    // if (!isValid) {
+    if (isValid) {
+      setCurrentStep(savedData.step);
+      setQuizData(savedData);
+    } else {
       clearQuizStorage();
       setCurrentStep(1);
       setQuizData({});
-    // } else {
-    //   setCurrentStep(savedData.step);
-    //   setQuizData(savedData);
-    // }
+    }
   }, []);
 
   const handleRestart = () => {
@@ -48,18 +48,28 @@ function App() {
     setQuizData({});
   };
 
+  // Debug log to check values
+  console.log("Current Step:", currentStep);
+  console.log("Quiz Data:", quizData);
+
   return (
     <div className="app">
       <header>
         <h1>QuizMaster</h1>
+        {quizData.username && currentStep > 1 && (
+          <div className="user-info">Welcome, {quizData.username}!</div>
+        )}
       </header>
 
       <main>
         {currentStep === 1 && (
-          <UsernameForm onSuccess={(username) => {
-            setQuizData({ step: 2, username });
-            setCurrentStep(2);
-          }} />
+          <UsernameForm 
+            initialValue={quizData.username || ''}
+            onSuccess={(username) => {
+              setQuizData({ step: 2, username });
+              setCurrentStep(2);
+            }} 
+          />
         )}
 
         {currentStep === 2 && (
@@ -86,25 +96,38 @@ function App() {
           />
         )}
 
-      {currentStep === 4 && (
-        <Quiz
-          topic={quizData.selectedTopic}
-          difficulty={quizData.selectedLevel}
-          onComplete={(score) => {
-            setQuizData(prev => ({ ...prev, step: 5, score }));
-            setCurrentStep(5);
-          }}
-        />
-      )}
+        {currentStep === 4 && (
+          <Quiz
+            topic={quizData.selectedTopic}
+            difficulty={quizData.selectedLevel}
+            questions={quizData.questions}
+            onComplete={(score) => {
+              setQuizData(prev => ({ ...prev, step: 5, score }));
+              setCurrentStep(5);
+            }}
+          />
+        )}
 
-        {currentStep === 5 && (
+        {currentStep === 5 && quizData.score !== undefined && (
           <Results 
-            score={quizData.score} 
-            total={quizData.questions?.length} 
+            score={Number(quizData.score)}
+            total={quizData.questions ? quizData.questions.length : 0}
             onRestart={handleRestart}
           />
         )}
       </main>
+
+      {currentStep > 1 && currentStep < 5 && (
+        <footer>
+          <button className="back-btn" onClick={() => {
+            const prevStep = currentStep - 1;
+            setCurrentStep(prevStep);
+            setQuizData(prev => ({ ...prev, step: prevStep }));
+          }}>
+            Back
+          </button>
+        </footer>
+      )}
     </div>
   );
 }

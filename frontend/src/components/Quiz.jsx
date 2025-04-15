@@ -24,6 +24,7 @@ export const Quiz = ({ topic, difficulty, onComplete }) => {
       loadQuestion(1);
     }
   }, []);
+  
 
   const loadQuestion = async (page) => {
     try {
@@ -67,13 +68,15 @@ export const Quiz = ({ topic, difficulty, onComplete }) => {
       setError('Please select an answer before proceeding');
       return;
     }
-
-    if (selectedAnswer === currentQuestion.correctAnswer) {
-      const newScore = score + 1;
-      setScore(newScore);
-      setStorageItem('quizProgress', { ...progress, score: newScore });
-    }
-
+  
+    // Calculate new score first
+    const newScore = selectedAnswer === currentQuestion.correctAnswer 
+      ? score + 1 
+      : score;
+  
+    setScore(newScore);
+    setStorageItem('quizProgress', { ...progress, score: newScore });
+  
     if (progress.page < progress.totalPages) {
       await loadQuestion(progress.page + 1);
       setSelectedAnswer('');
@@ -90,10 +93,11 @@ export const Quiz = ({ topic, difficulty, onComplete }) => {
         topic,
         difficulty
       });
-
+  
       localStorage.removeItem('quizProgress');
-      onComplete({ 
-        score: selectedAnswer === currentQuestion.correctAnswer ? score + 1 : score,
+      // Simply pass the score (number) to match what App.jsx expects
+      onComplete({
+        score, 
         total: progress.totalQuestions
       });
     } catch (err) {

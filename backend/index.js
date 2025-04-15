@@ -13,9 +13,10 @@ DB();
 //Add necessary middleware
 app.use(express.json());
 app.use(cors({
-    origin: "http://localhost:3000", // Allow your frontend domain
-    credentials: true, // Allow credentials like cookies
-}));
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }));
 
 
 // Routes

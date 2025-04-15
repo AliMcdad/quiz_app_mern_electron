@@ -101,10 +101,10 @@ function App() {
             topic={quizData.selectedTopic}
             difficulty={quizData.selectedLevel}
             questions={quizData.questions}
-            onComplete={(score) => {
-              setQuizData(prev => ({ ...prev, step: 5, score }));
+            onComplete={({ score, total }) => {
+              setQuizData(prev => ({ ...prev, score, total }));
               setCurrentStep(5);
-            }}
+            }}            
           />
         )}
 

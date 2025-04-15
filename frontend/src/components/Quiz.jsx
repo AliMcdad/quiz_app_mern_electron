@@ -31,7 +31,8 @@ export const Quiz = ({ topic, difficulty, onComplete }) => {
       setLoading(true);
       setError('');
       const response = await fetchQuestions(topic, difficulty, page);
-      
+      console.log("📥 fetchQuestions response:", response);
+
       if (response.success && response.questions.length > 0) {
         setCurrentQuestion(response.questions[0]);
         setProgress(prev => ({
@@ -85,15 +86,16 @@ export const Quiz = ({ topic, difficulty, onComplete }) => {
     }
   };
 
-  const handleSubmit = async () => {
+ /*  const handleSubmit = async () => {
     try {
       await submitQuizResults({
         score,
-        total: progress.totalQuestions,
+        total:progress.totalQuestions,
         topic,
         difficulty
       });
-  
+      console.log("🚨 Submitting to Results:", { score, total: progress.totalQuestions });
+
       localStorage.removeItem('quizProgress');
       // Simply pass the score (number) to match what App.jsx expects
       onComplete({
@@ -103,8 +105,38 @@ export const Quiz = ({ topic, difficulty, onComplete }) => {
     } catch (err) {
       setError('Failed to submit results. Please try again.');
     }
-  };
+  }; */
 
+  const handleSubmit = async () => {
+    try {
+      // Make absolutely sure both values are numbers
+      const finalScore = Number(score);
+      const finalTotal = Number(progress.totalQuestions);
+  
+      // Submit results to backend
+      await submitQuizResults({
+        score: finalScore,
+        total: finalTotal,
+        topic,
+        difficulty
+      });
+  
+      console.log("🚨 Submitting to Results:", { finalScore, finalTotal });
+  
+      // Clear saved progress
+      localStorage.removeItem('quizProgress');
+  
+      // Notify parent (App.jsx) and move to Results step
+      onComplete({
+        score: finalScore,
+        total: finalTotal
+      });
+    } catch (err) {
+      console.error("❌ Error submitting results:", err);
+      setError('Failed to submit results. Please try again.');
+    }
+  };
+  
   if (loading) return <div className="loader">Loading question...</div>;
 
   return (

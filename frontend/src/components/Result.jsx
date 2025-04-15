@@ -1,4 +1,5 @@
 export const Results = ({ score, total, onRestart }) => {
+  console.log("📊 Results received:", { score, total });
     const percentage = ((score / total) * 100).toFixed(1);
   
     return (
